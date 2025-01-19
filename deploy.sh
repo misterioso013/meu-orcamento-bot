@@ -90,13 +90,8 @@ if pm2 show meu-orcamento-bot > /dev/null 2>&1; then
 else
     echo -e "${YELLOW}🚀 Iniciando o bot...${NC}"
     cd "$(pwd)" # Garante que estamos no diretório correto
-    pm2 start dist/index.js \
-        --name meu-orcamento-bot \
-        --node-args="-r $(pwd)/dist/register.js" \
-        --cwd $(pwd) \
-        --env production \
-        --time \
-        --exp-backoff-restart-delay=100
+    export NODE_ENV=production
+    pm2 start ecosystem.config.js
 fi
 
 # Salva a configuração do PM2

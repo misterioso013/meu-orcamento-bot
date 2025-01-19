@@ -1,7 +1,16 @@
 import { addAlias } from 'module-alias';
-import { join, dirname } from 'path';
+import { join } from 'path';
 
-const baseDir = process.env.NODE_ENV === 'production' ? 'dist' : 'src';
-const rootDir = join(dirname(__dirname), baseDir === 'dist' ? 'dist' : '');
+const rootDir = process.env.NODE_ENV === 'production'
+  ? join(process.cwd(), 'dist')
+  : join(process.cwd(), 'src');
 
+// Registra o alias @ para apontar para o diretório correto
 addAlias('@', rootDir);
+
+// Log para debug
+console.log('Module alias configurado:', {
+  '@': rootDir,
+  'NODE_ENV': process.env.NODE_ENV,
+  'CWD': process.cwd()
+});
