@@ -1,3 +1,4 @@
+import './register';
 import "dotenv/config";
 import { createBot } from "./config/bot";
 import { setupStartCommand } from "./handlers/start";

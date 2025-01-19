@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "NODE_ENV=production node -r ./dist/register.js dist/index.js"
   },
   "keywords": [
     "ai",
@@ -27,8 +27,11 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/module-alias": "^2.0.4",
     "@types/node": "^22.10.7",
+    "module-alias": "^2.2.3",
     "prisma": "^6.2.1",
+    "tsconfig-paths": "^4.2.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   }
