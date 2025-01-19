@@ -23,18 +23,3 @@ export async function getOrder(id: string) {
   });
   return order;
 }
-
-export async function updateOrder(id: string, order: Order) {
-  const orderData = orderSchema.parse(order);
-  const updatedOrder = await db.order.update({
-    where: { id },
-    data: orderData as Order,
-  });
-  return updatedOrder;
-}
-
-export async function deleteOrder(id: string) {
-  await db.order.delete({
-    where: { id },
-  });
-}

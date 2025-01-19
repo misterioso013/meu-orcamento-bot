@@ -24,9 +24,3 @@ export async function updateUser(id: string, user: User) {
   });
   return updatedUser;
 }
-
-export async function deleteUser(id: string) {
-  await db.user.delete({
-    where: { id },
-  });
-}
