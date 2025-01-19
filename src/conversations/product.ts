@@ -80,14 +80,53 @@ export async function editProductConversation(conversation: MyConversation, ctx:
 
   await ctx.reply(`Editando: ${product.name}\nDigite o novo nome ou "pular" para manter:`);
   const { message } = await conversation.wait();
-  const name = message?.text === "pular" ? product.name : message?.text || product.name;
+  const name = message?.text?.toLowerCase() === "pular" ? product.name : message?.text || product.name;
 
-  // Repete o processo para os outros campos...
-  // Por brevidade, estou mostrando apenas o nome, mas você deve repetir para todos os campos
+  await ctx.reply(`Digite a nova descrição ou "pular" para manter:\nDescrição atual: ${product.description}`);
+  const { message: descMessage } = await conversation.wait();
+  const description = descMessage?.text?.toLowerCase() === "pular" ? product.description : descMessage?.text || product.description;
+
+  await ctx.reply(`Digite o novo preço ou "pular" para manter:\nPreço atual: R$ ${product.price}`);
+  const { message: priceMessage } = await conversation.wait();
+  const price = priceMessage?.text?.toLowerCase() === "pular" ? product.price : priceMessage?.text || product.price;
+
+  await ctx.reply(`Envie a nova imagem ou digite "pular" para manter a atual:`);
+  const { message: imageMessage } = await conversation.wait();
+  let image = product.image || "";
+
+  if (imageMessage?.photo) {
+    const photo = imageMessage.photo[imageMessage.photo.length - 1];
+    image = photo.file_id;
+  } else if (imageMessage?.text?.toLowerCase() !== "pular") {
+    await ctx.reply("❌ Formato de imagem inválido. Mantendo a imagem atual.");
+  }
+
+  await ctx.reply(`Escolha a nova categoria ou digite "pular" para manter:\nCategoria atual: ${product.category}\n1 - SITE\n2 - BOT\n3 - APP\n4 - SCRIPT`);
+  const { message: categoryMessage } = await conversation.wait();
+  let category = product.category;
+
+  if (categoryMessage?.text && categoryMessage.text.toLowerCase() !== "pular") {
+    const categoryMap: Record<string, Category> = {
+      "1": "SITE",
+      "2": "BOT",
+      "3": "APP",
+      "4": "SCRIPT"
+    };
+    category = categoryMap[categoryMessage.text] || product.category;
+  }
+
+  await ctx.reply(`Digite o novo link de download ou "pular" para manter:\nLink atual: ${product.downloadLink || "Nenhum"}`);
+  const { message: downloadMessage } = await conversation.wait();
+  const downloadLink = downloadMessage?.text?.toLowerCase() === "pular" ? product.downloadLink : downloadMessage?.text || null;
 
   const updatedProduct = await updateProduct(productId, {
     ...product,
     name,
+    description,
+    price,
+    image,
+    category,
+    downloadLink,
     updatedAt: new Date(),
   });
 
