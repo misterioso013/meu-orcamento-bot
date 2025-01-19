@@ -1,0 +1,35 @@
+{
+  "name": "meu-orcamento-bot",
+  "version": "1.0.0",
+  "description": "Um bot de orçamento para Telegram",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "ai",
+    "telegram",
+    "bot",
+    "budget",
+    "orcamento"
+  ],
+  "author": "Rosiel Victor<rosielvictor.dev@gmail.com>",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@grammyjs/conversations": "^1.2.0",
+    "@prisma/client": "6.2.1",
+    "dotenv": "^16.4.7",
+    "grammy": "^1.34.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "prisma": "^6.2.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
