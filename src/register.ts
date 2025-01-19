@@ -1,6 +1,7 @@
 import { addAlias } from 'module-alias';
-import { join } from 'path';
+import { join, dirname } from 'path';
 
 const baseDir = process.env.NODE_ENV === 'production' ? 'dist' : 'src';
+const rootDir = join(dirname(__dirname), baseDir === 'dist' ? 'dist' : '');
 
-addAlias('@', join(__dirname, baseDir === 'dist' ? '.' : '..'));
+addAlias('@', rootDir);
