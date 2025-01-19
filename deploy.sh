@@ -86,12 +86,16 @@ pnpm run build
 # Verifica se o bot já está rodando no PM2
 if pm2 show meu-orcamento-bot > /dev/null 2>&1; then
     echo -e "${YELLOW}🔄 Reiniciando o bot...${NC}"
-    pm2 restart meu-orcamento-bot --update-env
+    pm2 restart meu-orcamento-bot
 else
     echo -e "${YELLOW}🚀 Iniciando o bot...${NC}"
+<<<<<<< HEAD
     cd "$(pwd)" # Garante que estamos no diretório correto
     export NODE_ENV=production
     pm2 start ecosystem.config.js
+=======
+    pm2 start dist/index.js --name meu-orcamento-bot
+>>>>>>> parent of 63e1f9c (Enhance deployment process and module aliasing:)
 fi
 
 # Salva a configuração do PM2
