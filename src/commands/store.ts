@@ -2,7 +2,18 @@ import { Bot, InlineKeyboard } from "grammy";
 import { MyContext } from "@/types/context";
 import { listProducts, getProduct } from "@/utils/db/product";
 import { convertToStars } from "@/utils/currency";
-import { Category } from "@prisma/client";
+import { Category, Product } from "@prisma/client";
+
+// Função auxiliar para obter emoji da categoria
+function getCategoryEmoji(category: Category): string {
+  const emojiMap: Record<Category, string> = {
+    SITE: "🌐",
+    BOT: "🤖",
+    APP: "📱",
+    SCRIPT: "📜"
+  };
+  return emojiMap[category] || "❓";
+}
 
 export function setupStoreCommands(bot: Bot<MyContext>) {
   // Handler para mostrar categorias
@@ -54,7 +65,8 @@ export function setupStoreCommands(bot: Bot<MyContext>) {
 
       const keyboard = new InlineKeyboard();
       for (const product of categoryProducts) {
-        const starsPrice = await convertToStars(product.price || 0);
+        const price = parseFloat(product.price);
+        const starsPrice = await convertToStars(price);
         keyboard.text(
           `${product.name} - ⭐️ ${starsPrice}`,
           `view_product:${product.id}`
@@ -105,7 +117,8 @@ export function setupStoreCommands(bot: Bot<MyContext>) {
 
         const keyboard = new InlineKeyboard();
         for (const product of products) {
-          const starsPrice = await convertToStars(product.price || 0);
+          const price = parseFloat(product.price);
+          const starsPrice = await convertToStars(price);
           keyboard.text(
             `${product.name} - ⭐️ ${starsPrice}`,
             `view_product:${product.id}`
@@ -144,17 +157,18 @@ export function setupStoreCommands(bot: Bot<MyContext>) {
         return;
       }
 
-      const starsPrice = await convertToStars(product.price || 0);
+      const price = parseFloat(product.price);
+      const starsPrice = await convertToStars(price);
       const keyboard = new InlineKeyboard()
         .text("💫 Comprar por ⭐️ " + starsPrice, `buy_product:${product.id}`).row()
         .text("🔙 Voltar", "store");
 
       const message = `*${product.name}*\n\n` +
         `💫 Preço: ⭐️ ${starsPrice}\n` +
-        `💰 (R$ ${product.price?.toFixed(2)})\n\n` +
+        `💰 (R$ ${parseFloat(product.price).toFixed(2)})\n\n` +
         `📝 *Descrição:*\n${product.description}\n\n` +
-        `📋 *Detalhes:*\n${product.largeDescription}\n\n` +
-        `🏷️ Categoria: ${product.category}`;
+        `📋 *Detalhes:*\n${product.description}\n\n` +
+        `🏷️ Categoria: ${product.category || 'N/A'}`;
 
       if (product.image) {
         try {
@@ -222,17 +236,23 @@ export function setupStoreCommands(bot: Bot<MyContext>) {
         return;
       }
 
-      const starsPrice = await convertToStars(product.price || 0);
+      const price = parseFloat(product.price);
+      const starsPrice = await convertToStars(price);
 
-      await ctx.replyWithInvoice(
+      await ctx.api.sendInvoice(
+        ctx.from.id,
         product.name || "Untitled", // título do produto
         product.description || "No description", // descrição
         productId, // payload para identificar o produto
         "XTR", // moeda das Stars
         [{
-          amount: starsPrice,
+          amount: Math.round(starsPrice * 100), // Telegram espera o valor em centavos
           label: product.name || "Untitled"
-        }]
+        }],
+        {
+          need_name: true,
+          need_email: true
+        }
       );
 
       await ctx.answerCallbackQuery();
@@ -275,15 +295,4 @@ export function setupStoreCommands(bot: Bot<MyContext>) {
       await ctx.reply("Ocorreu um erro ao processar seu pagamento. Por favor, contate o suporte.");
     }
   });
-}
-
-// Função auxiliar para emojis das categorias
-function getCategoryEmoji(category: Category): string {
-  const categoryMap: Record<Category, string> = {
-    SITE: "🌐 Sites",
-    BOT: "🤖 Bots",
-    APP: "📱 Apps",
-    SCRIPT: "📜 Scripts"
-  };
-  return categoryMap[category];
 }

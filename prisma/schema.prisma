@@ -73,13 +73,15 @@ model Message {
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  name        String
-  description String
-  price       String
-  image       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  description  String
+  price        String
+  image        String?
+  category     Category
+  downloadLink String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   Order Order[]
 

@@ -17,13 +17,9 @@ export async function addProductConversation(conversation: MyConversation, ctx: 
   const { message: descMessage } = await conversation.wait();
   const description = descMessage?.text || "";
 
-  await ctx.reply("Digite a descrição completa do produto:");
-  const { message: largeDescMessage } = await conversation.wait();
-  const largeDescription = largeDescMessage?.text || "";
-
   await ctx.reply("Digite o preço do produto (apenas números):");
   const { message: priceMessage } = await conversation.wait();
-  const price = Number(priceMessage?.text || "0");
+  const price = priceMessage?.text || "0";
 
   await ctx.reply("Envie a imagem do produto:");
   const { message: imageMessage } = await conversation.wait();
@@ -56,11 +52,9 @@ export async function addProductConversation(conversation: MyConversation, ctx: 
     id: randomUUID(),
     name,
     description,
-    largeDescription,
     price,
     image,
     category,
-    categoryId: category,
     downloadLink,
     createdAt: new Date(),
     updatedAt: new Date(),
