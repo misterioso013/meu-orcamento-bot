@@ -21,9 +21,18 @@ echo -e "${YELLOW}📦 Instalando Node.js LTS...${NC}"
 nvm install --lts
 nvm use --lts
 
-# Habilita o corepack (para usar pnpm)
+# Configura o PNPM
+echo -e "${YELLOW}📦 Configurando PNPM...${NC}"
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+
+# Habilita o corepack e configura o PNPM
 echo -e "${YELLOW}📦 Habilitando corepack...${NC}"
 corepack enable
+pnpm setup
+
+# Recarrega as variáveis de ambiente
+source ~/.bashrc
 
 # Verifica se o PM2 está instalado
 if ! command -v pm2 &> /dev/null; then
