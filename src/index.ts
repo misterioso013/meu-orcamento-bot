@@ -4,6 +4,7 @@ import { setupStartCommand } from "./handlers/start";
 import { setupBudgetHandlers } from "./handlers/budget";
 import { setupAiHandlers } from "./handlers/ai";
 import { setupChatHandlers } from "./handlers/chat";
+import { setupHelpCommand } from "./handlers/help";
 import { setupProductCommands } from "./commands/admin/product";
 import { setupStoreCommands } from "./commands/store";
 import { setupAdminBudgetCommands } from "./commands/admin/budget";
@@ -21,6 +22,7 @@ setupStartCommand(bot);
 setupBudgetHandlers(bot);
 setupAiHandlers(bot);
 setupStoreCommands(bot);
+setupHelpCommand(bot);
 
 // Setup do handler de chat por último
 setupChatHandlers(bot);
