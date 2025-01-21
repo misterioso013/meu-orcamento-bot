@@ -31,12 +31,14 @@ export function setupHelpCommand(bot: Bot<MyContext>) {
 /orcamentos - Ver e gerenciar orçamentos
 /done - Finalizar uma conversa de suporte
 /info - Ver informações detalhadas de um orçamento
+/broadcast - Enviar mensagem para todos os usuários
 
 *Funções administrativas:*
 • Gerenciamento completo de produtos
 • Análise e resposta de orçamentos
 • Atendimento ao cliente via chat
-• Envio de propostas personalizadas`;
+• Envio de propostas personalizadas
+• Comunicação em massa com usuários`;
 
     await ctx.reply(
       isAdmin ? userCommands + adminCommands : userCommands,

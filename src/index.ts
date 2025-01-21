@@ -10,6 +10,7 @@ import { setupProductCommands } from "./commands/admin/product";
 import { setupStoreCommands } from "./commands/store";
 import { setupAdminBudgetCommands } from "./commands/admin/budget";
 import { setupInfoCommands } from "./commands/admin/info";
+import { setupBroadcastCommands } from "./commands/admin/broadcast";
 
 const bot = createBot();
 
@@ -17,6 +18,7 @@ const bot = createBot();
 setupProductCommands(bot);
 setupAdminBudgetCommands(bot);
 setupInfoCommands(bot);
+setupBroadcastCommands(bot);
 
 // Setup dos outros handlers
 setupStartCommand(bot);
