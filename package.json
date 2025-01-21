@@ -4,7 +4,7 @@
   "description": "Um bot de orçamento para Telegram",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "NODE_ENV=development tsx -r tsconfig-paths/register watch src/index.ts",
     "build": "tsc",
     "start": "NODE_ENV=production node -r ./dist/register.js dist/index.js"
   },
