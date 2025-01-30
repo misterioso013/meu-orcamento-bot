@@ -4,12 +4,12 @@ import { Category } from "@prisma/client";
 export const userSchema = z.object({
   id: z.string(),
   name: z.string(),
-  username: z.string().optional(),
+  username: z.string().nullable(),
   email: z.string().email().optional(),
   phone: z.string().optional(),
-  isAdmin: z.boolean().optional(),
-  isActive: z.boolean().optional(),
-  inChatAi: z.boolean().optional(),
+  isAdmin: z.boolean(),
+  isActive: z.boolean(),
+  inChatAi: z.boolean(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

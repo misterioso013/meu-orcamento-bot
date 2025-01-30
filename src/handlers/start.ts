@@ -12,8 +12,8 @@ export function setupStartCommand(bot: Bot<MyContext>) {
       const userData: User = {
         id: ctx.from?.id.toString() as string,
         name,
-        username: ctx.from?.username || undefined,
-        isAdmin: isAdmin,
+        username: ctx.from?.username || null,
+        isAdmin: isAdmin || false,
         isActive: true,
         inChatAi: false,
         createdAt: new Date(),
