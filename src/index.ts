@@ -13,6 +13,7 @@ import { setupInfoCommands } from "./commands/admin/info";
 import { setupBroadcastCommands } from "./commands/admin/broadcast";
 import { conversations, createConversation } from "@grammyjs/conversations";
 import { createRequestConversation } from "./conversations/request";
+import { setupDailyBackup } from './handlers/backup';
 
 const bot = createBot();
 
@@ -35,5 +36,8 @@ setupHelpCommand(bot);
 
 // Setup do handler de chat por último
 setupChatHandlers(bot);
+
+// Adicione após a inicialização do bot
+setupDailyBackup(bot);
 
 bot.start();

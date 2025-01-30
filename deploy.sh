@@ -95,6 +95,8 @@ fi
 # Salva a configuração do PM2
 pm2 save
 
+mkdir -p backups
+
 echo -e "\n${GREEN}✅ Deploy concluído com sucesso!${NC}"
 echo -e "${YELLOW}📊 Use 'pm2 monit' para monitorar o bot${NC}"
 echo -e "${YELLOW}📝 Use 'pm2 logs meu-orcamento-bot' para ver os logs${NC}"
