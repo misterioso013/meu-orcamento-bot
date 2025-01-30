@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS "requests" (
 );
 
 -- CreateIndex
-CREATE INDEX "messages_userId_idx" ON "messages"("userId");
+CREATE INDEX IF NOT EXISTS "messages_userId_idx" ON "messages"("userId");
 
 -- CreateIndex
-CREATE INDEX "messages_budgetId_idx" ON "messages"("budgetId");
+CREATE INDEX IF NOT EXISTS "messages_budgetId_idx" ON "messages"("budgetId");
