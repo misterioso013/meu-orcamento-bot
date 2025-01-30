@@ -3,6 +3,7 @@ import { MyContext } from "@/types/context";
 import { listBudgets, getBudget, updateBudgetStatus } from "@/utils/db/budget";
 import { Budget, BudgetStatus } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
+import { isUserAdmin, getAdminUsers } from "@/utils/db/user";
 
 const prisma = new PrismaClient();
 
@@ -61,9 +62,10 @@ function formatBudgetDetails(budget: Budget): string {
 export function setupAdminBudgetCommands(bot: Bot<MyContext>) {
   // Comando para listar todos os orçamentos
   bot.command("orcamentos", async (ctx) => {
-    if (!ctx.from?.id || ctx.from.id.toString() !== process.env.ADMIN_ID) {
-      return;
-    }
+    if (!ctx.from?.id) return;
+
+    const isAdmin = await isUserAdmin(ctx.from.id.toString());
+    if (!isAdmin) return;
 
     // Buscar todos os orçamentos com dados dos usuários
     const budgets = await prisma.budget.findMany({
@@ -124,7 +126,13 @@ export function setupAdminBudgetCommands(bot: Bot<MyContext>) {
 
   // Handler para visualizar orçamentos por status
   bot.callbackQuery(/^view_status:(.+)$/, async (ctx) => {
-    if (ctx.from?.id.toString() !== process.env.ADMIN_ID) {
+    if (!ctx.from?.id) {
+      await ctx.answerCallbackQuery("Erro ao identificar usuário");
+      return;
+    }
+
+    const isAdmin = await isUserAdmin(ctx.from.id.toString());
+    if (!isAdmin) {
       await ctx.answerCallbackQuery("Acesso não autorizado");
       return;
     }
@@ -172,6 +180,17 @@ export function setupAdminBudgetCommands(bot: Bot<MyContext>) {
 
   // Handler para voltar à lista de status
   bot.callbackQuery("back_to_budgets", async (ctx) => {
+    if (!ctx.from?.id) {
+      await ctx.answerCallbackQuery("Erro ao identificar usuário");
+      return;
+    }
+
+    const isAdmin = await isUserAdmin(ctx.from.id.toString());
+    if (!isAdmin) {
+      await ctx.answerCallbackQuery("Acesso não autorizado");
+      return;
+    }
+
     await ctx.answerCallbackQuery();
     await ctx.deleteMessage();
     // Recriar o comando /orcamentos
@@ -180,7 +199,13 @@ export function setupAdminBudgetCommands(bot: Bot<MyContext>) {
 
   // Handler para visualizar e gerenciar um orçamento
   bot.callbackQuery(/^admin_budget:(.+)$/, async (ctx) => {
-    if (ctx.from?.id.toString() !== process.env.ADMIN_ID) {
+    if (!ctx.from?.id) {
+      await ctx.answerCallbackQuery("Erro ao identificar usuário");
+      return;
+    }
+
+    const isAdmin = await isUserAdmin(ctx.from.id.toString());
+    if (!isAdmin) {
       await ctx.answerCallbackQuery("Acesso não autorizado");
       return;
     }
@@ -199,6 +224,7 @@ export function setupAdminBudgetCommands(bot: Bot<MyContext>) {
       .text("✅ Aprovar", `status:${budget.id}:APPROVED`)
       .text("❌ Rejeitar", `status:${budget.id}:REJECTED`).row()
       .text("💰 Enviar Proposta", `send_proposal:${budget.id}`).row()
+      .text("📝 Solicitar informações", `request_info:${budget.id}`).row()
       .text("🎉 Concluído", `status:${budget.id}:COMPLETED`).row()
       .text("🔙 Voltar", "admin_budgets");
 
@@ -211,7 +237,13 @@ export function setupAdminBudgetCommands(bot: Bot<MyContext>) {
 
   // Handler para iniciar envio de proposta
   bot.callbackQuery(/^send_proposal:(.+)$/, async (ctx) => {
-    if (ctx.from?.id.toString() !== process.env.ADMIN_ID) {
+    if (!ctx.from?.id) {
+      await ctx.answerCallbackQuery("Erro ao identificar usuário");
+      return;
+    }
+
+    const isAdmin = await isUserAdmin(ctx.from.id.toString());
+    if (!isAdmin) {
       await ctx.answerCallbackQuery("Acesso não autorizado");
       return;
     }
@@ -223,7 +255,13 @@ export function setupAdminBudgetCommands(bot: Bot<MyContext>) {
 
   // Handler para atualizar status
   bot.callbackQuery(/^status:(.+):(.+)$/, async (ctx) => {
-    if (ctx.from?.id.toString() !== process.env.ADMIN_ID) {
+    if (!ctx.from?.id) {
+      await ctx.answerCallbackQuery("Erro ao identificar usuário");
+      return;
+    }
+
+    const isAdmin = await isUserAdmin(ctx.from.id.toString());
+    if (!isAdmin) {
       await ctx.answerCallbackQuery("Acesso não autorizado");
       return;
     }
@@ -270,12 +308,18 @@ export function setupAdminBudgetCommands(bot: Bot<MyContext>) {
 
   // Handler para voltar à lista de orçamentos
   bot.callbackQuery("admin_budgets", async (ctx) => {
-    if (ctx.from?.id.toString() !== process.env.ADMIN_ID) {
+    if (!ctx.from?.id) {
+      await ctx.answerCallbackQuery("Erro ao identificar usuário");
+      return;
+    }
+
+    const isAdmin = await isUserAdmin(ctx.from.id.toString());
+    if (!isAdmin) {
       await ctx.answerCallbackQuery("Acesso não autorizado");
       return;
     }
 
-    const budgets = await listBudgets(process.env.ADMIN_ID);
+    const budgets = await listBudgets(ctx.from.id.toString());
     if (budgets.length === 0) {
       await ctx.editMessageText("Nenhum orçamento pendente.");
       await ctx.answerCallbackQuery();

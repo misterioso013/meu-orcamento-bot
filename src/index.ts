@@ -11,8 +11,14 @@ import { setupStoreCommands } from "./commands/store";
 import { setupAdminBudgetCommands } from "./commands/admin/budget";
 import { setupInfoCommands } from "./commands/admin/info";
 import { setupBroadcastCommands } from "./commands/admin/broadcast";
+import { conversations, createConversation } from "@grammyjs/conversations";
+import { createRequestConversation } from "./conversations/request";
 
 const bot = createBot();
+
+// Registra as conversas
+bot.use(conversations());
+bot.use(createConversation(createRequestConversation, "createRequest"));
 
 // Setup dos comandos administrativos primeiro
 setupProductCommands(bot);

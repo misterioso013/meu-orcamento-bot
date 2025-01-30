@@ -4,6 +4,7 @@ import { db } from "@/utils/db";
 import { formatBudgetDetails, formatDate } from "@/utils/formatters";
 import { updateBudgetChatStatus } from "@/utils/db/message";
 import { Budget, Message } from "@prisma/client";
+import { getAdminUsers } from "@/utils/db/user";
 
 export function setupInfoCommands(bot: Bot<MyContext>) {
   // Comando para encerrar chat
@@ -174,6 +175,30 @@ export function setupInfoCommands(bot: Bot<MyContext>) {
     } catch (error) {
       console.error("Erro ao buscar informações:", error);
       await ctx.reply("Ocorreu um erro ao buscar as informações. Tente novamente.");
+    }
+  });
+
+  // Comando para listar admins
+  bot.command("admins", async (ctx) => {
+    try {
+      const admins = await getAdminUsers();
+
+      if (admins.length === 0) {
+        await ctx.reply("Nenhum admin cadastrado!");
+        return;
+      }
+
+      let message = "👥 *Administradores*\n\n";
+      admins.forEach((admin, index) => {
+        message += `${index + 1}. ${admin.name} (ID: ${admin.id})\n`;
+      });
+
+      await ctx.reply(message, {
+        parse_mode: "Markdown"
+      });
+    } catch (error) {
+      console.error("Erro ao listar admins:", error);
+      await ctx.reply("Ocorreu um erro ao listar os administradores.");
     }
   });
 }
