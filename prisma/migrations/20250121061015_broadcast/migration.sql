@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "users" (
+CREATE TABLE IF NOT EXISTS "users" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "username" TEXT,
@@ -11,7 +11,7 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
-CREATE TABLE "budgets" (
+CREATE TABLE IF NOT EXISTS "budgets" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "userId" TEXT NOT NULL,
     "category" TEXT NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE "budgets" (
 );
 
 -- CreateTable
-CREATE TABLE "messages" (
+CREATE TABLE IF NOT EXISTS "messages" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "content" TEXT NOT NULL,
     "fileId" TEXT,
@@ -49,7 +49,7 @@ CREATE TABLE "messages" (
 );
 
 -- CreateTable
-CREATE TABLE "products" (
+CREATE TABLE IF NOT EXISTS "products" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE "products" (
 );
 
 -- CreateTable
-CREATE TABLE "orders" (
+CREATE TABLE IF NOT EXISTS "orders" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "userId" TEXT NOT NULL,
     "productId" TEXT NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE "orders" (
 );
 
 -- CreateTable
-CREATE TABLE "requests" (
+CREATE TABLE IF NOT EXISTS "requests" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
